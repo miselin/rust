@@ -53,7 +53,6 @@ impl OSRng {
 
     /// Create a new `OSRng`.
     #[cfg(windows)]
-    #[fixed_stack_segment] #[inline(never)]
     pub fn new() -> OSRng {
         let mut hcp = 0;
         unsafe {raw::rust_win32_rand_acquire(&mut hcp)};
@@ -87,7 +86,6 @@ impl Rng for OSRng {
         self.fill_bytes(v);
         unsafe { cast::transmute(v) }
     }
-    #[fixed_stack_segment] #[inline(never)]
     fn fill_bytes(&mut self, v: &mut [u8]) {
         use libc::DWORD;
 
@@ -105,7 +103,6 @@ impl Drop for OSRng {
     }
 
     #[cfg(windows)]
-    #[fixed_stack_segment] #[inline(never)]
     fn drop(&mut self) {
         unsafe {raw::rust_win32_rand_release(self.hcryptprov)}
     }
@@ -113,17 +110,15 @@ impl Drop for OSRng {
 
 #[cfg(windows)]
 mod raw {
-    use libc::{c_long, DWORD, BYTE};
+    use libc::{c_long, DWORD, BYTE, BOOL};
 
     pub type HCRYPTPROV = c_long;
 
     // these functions are implemented so that they either succeed or
     // abort(), so we can just assume they work when we call them.
-    extern {
-        pub fn rust_win32_rand_acquire(phProv: *mut HCRYPTPROV);
-        pub fn rust_win32_rand_gen(hProv: HCRYPTPROV, dwLen: DWORD, pbBuffer: *mut BYTE);
-        pub fn rust_win32_rand_release(hProv: HCRYPTPROV);
-    }
+    externfn! {pub fn rust_wind32_rand_gen(hProv: HCRYPTPROV, dwLen: DWORD, pbBuffer: *BYTE)}
+    externfn! {pub fn rust_win32_rand_release(hProv: HCRYPTPROV)}
+    externfn! {pub fn rust_win32_rand_acquire(phProv: *mut HCRYPTPROV)}
 }
 
 #[cfg(test)]
