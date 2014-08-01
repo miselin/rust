@@ -49,11 +49,7 @@ pub mod file;
 #[path = "file_win32.rs"]
 pub mod file;
 
-#[cfg(target_os = "macos")]
-#[cfg(target_os = "ios")]
-#[cfg(target_os = "freebsd")]
-#[cfg(target_os = "android")]
-#[cfg(target_os = "linux")]
+#[cfg(unix)]
 #[path = "timer_unix.rs"]
 pub mod timer;
 

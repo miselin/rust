@@ -25,6 +25,7 @@
 extern crate alloc;
 extern crate libc;
 extern crate collections;
+#[phase(plugin, link)] extern crate platform;
 
 #[cfg(test)] extern crate realrustrt = "rustrt";
 #[cfg(test)] extern crate test;
@@ -42,13 +43,14 @@ use core::any::Any;
 
 use task::{Task, BlockedTask, TaskOpts};
 
+pub use platform::stack;
+
 mod macros;
 
 mod at_exit_imp;
 mod local_ptr;
-mod thread_local_storage;
+mod stack;
 mod util;
-mod libunwind;
 
 pub mod args;
 pub mod bookkeeping;
@@ -59,7 +61,6 @@ pub mod local_data;
 pub mod local_heap;
 pub mod mutex;
 pub mod rtio;
-pub mod stack;
 pub mod task;
 pub mod thread;
 pub mod unwind;

@@ -131,6 +131,7 @@ extern crate core_rand = "rand";
 extern crate core_sync = "sync";
 extern crate libc;
 extern crate rustrt;
+extern crate platform;
 
 // Make std testable by not duplicating lang items. See #2912
 #[cfg(test)] extern crate realstd = "std";

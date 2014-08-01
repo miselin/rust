@@ -22,6 +22,8 @@ use core::raw;
 use local::Local;
 use task::Task;
 
+use platform::debug_mem;
+
 static RC_IMMORTAL : uint = 0x77777777;
 
 pub type Box = raw::Box<()>;
@@ -208,17 +210,6 @@ impl AllocHeader {
     fn from(a_box: *mut Box) -> *mut AllocHeader {
         (a_box as uint - AllocHeader::size()) as *mut AllocHeader
     }
-}
-
-#[cfg(unix)]
-fn debug_mem() -> bool {
-    // FIXME: Need to port the environment struct to newsched
-    false
-}
-
-#[cfg(windows)]
-fn debug_mem() -> bool {
-    false
 }
 
 impl MemoryRegion {

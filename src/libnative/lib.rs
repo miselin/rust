@@ -66,6 +66,7 @@
 
 extern crate alloc;
 extern crate libc;
+extern crate platform;
 #[cfg(test)] extern crate debug;
 
 use std::os;
@@ -74,14 +75,10 @@ use std::str;
 
 pub use task::NativeTaskBuilder;
 
-pub mod io;
-pub mod task;
+use platform::OS_DEFAULT_STACK_ESTIMATE;
 
-#[cfg(windows)]
-#[cfg(android)]
-static OS_DEFAULT_STACK_ESTIMATE: uint = 1 << 20;
-#[cfg(unix, not(android))]
-static OS_DEFAULT_STACK_ESTIMATE: uint = 2 * (1 << 20);
+pub mod task;
+pub mod io;
 
 #[lang = "start"]
 #[cfg(not(test))]
@@ -120,15 +117,7 @@ pub fn start(argc: int, argv: *const *const u8, main: proc()) -> int {
     //
     // Hence, we set SIGPIPE to ignore when the program starts up in order to
     // prevent this problem.
-    #[cfg(windows)] fn ignore_sigpipe() {}
-    #[cfg(unix)] fn ignore_sigpipe() {
-        use libc;
-        use libc::funcs::posix01::signal::signal;
-        unsafe {
-            assert!(signal(libc::SIGPIPE, libc::SIG_IGN) != -1);
-        }
-    }
-    ignore_sigpipe();
+    platform::ignore_sigpipe();
 
     rt::init(argc, argv);
     let mut exit_code = None;

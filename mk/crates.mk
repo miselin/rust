@@ -52,7 +52,7 @@
 TARGET_CRATES := libc std green rustuv native flate arena glob term semver \
                  uuid serialize sync getopts collections num test time rand \
                  url log regex graphviz core rlibc alloc debug rustrt \
-                 unicode
+                 unicode platform
 HOST_CRATES := syntax rustc rustdoc fourcc hexfloat regex_macros fmt_macros \
 	       rustc_llvm rustc_back
 CRATES := $(TARGET_CRATES) $(HOST_CRATES)
@@ -63,13 +63,13 @@ DEPS_rlibc :=
 DEPS_unicode := core
 DEPS_alloc := core libc native:jemalloc
 DEPS_debug := std
-DEPS_rustrt := alloc core libc collections native:rustrt_native
+DEPS_rustrt := alloc core libc collections native:rustrt_native platform
 DEPS_std := core libc rand alloc collections rustrt sync unicode \
 	native:rust_builtin native:backtrace
 DEPS_graphviz := std
 DEPS_green := std native:context_switch
 DEPS_rustuv := std native:uv native:uv_support
-DEPS_native := std
+DEPS_native := std platform
 DEPS_syntax := std term serialize log fmt_macros debug
 DEPS_rustc := syntax flate arena serialize getopts \
               time log graphviz debug rustc_llvm rustc_back
@@ -92,13 +92,14 @@ DEPS_fourcc := rustc syntax std
 DEPS_hexfloat := rustc syntax std
 DEPS_num := std
 DEPS_test := std getopts serialize term time regex native:rust_test_helpers
-DEPS_time := std serialize
+DEPS_time := std serialize platform
 DEPS_rand := core
 DEPS_url := std
 DEPS_log := std
 DEPS_regex := std
 DEPS_regex_macros = rustc syntax std regex
 DEPS_fmt_macros = std
+DEPS_platform := core libc alloc
 
 TOOL_DEPS_compiletest := test green rustuv getopts
 TOOL_DEPS_rustdoc := rustdoc native
@@ -114,6 +115,7 @@ ONLY_RLIB_alloc := 1
 ONLY_RLIB_rand := 1
 ONLY_RLIB_collections := 1
 ONLY_RLIB_unicode := 1
+ONLY_RLIB_platform := 1
 
 ################################################################################
 # You should not need to edit below this line

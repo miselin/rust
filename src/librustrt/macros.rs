@@ -40,7 +40,6 @@ macro_rules! rtassert (
     } )
 )
 
-
 macro_rules! rtabort (
     ($($arg:tt)*) => (format_args!(::util::abort, $($arg)*))
 )

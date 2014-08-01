@@ -224,6 +224,7 @@
 #[cfg(test)] extern crate rustuv;
 extern crate libc;
 extern crate alloc;
+extern crate platform;
 
 use alloc::arc::Arc;
 use std::mem::replace;
